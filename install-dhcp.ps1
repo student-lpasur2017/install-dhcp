@@ -25,19 +25,20 @@ Add-DhcpServerSecurityGroup
 
 # Demande à l'utilisateur combien d'etenndue il veut creer
 $i=Read-Host -Prompt "Combien d'étendue voulez vous créer ? "
+$i=[convert]::ToInt32($i,10) # Convertir la chaine en nombre et en base 10
 
-while ($i -eq 0) {
-    $nomEtendue=Read-Host -Prompt "Nom de l'étendue "
+while ($i -ne 0) {
+    $nomEtendue=Read-Host -Prompt "Nom de l'étendue (entre guillemet) "
     $StartIP=Read-Host -Prompt "Début de l'adressage IP"
     $EndIP=Read-Host -Prompt "Fin de l'adressage IP "
-    $mask=Read-Host -Prompt "Masque de l'étendue en notation CIDR "
-    $desc=Read-Host -Prompt "Description de l'étendue "
-    $state=Read-Host -Prompt "Etendue à l'état 'Active' ou 'Desactive' "
-    
+    $mask=Read-Host -Prompt "Masque de l'étendue "
+    $desc=Read-Host -Prompt "Description de l'étendue (entre guillemet) "
+    $state=Read-Host -Prompt "Etendue à l'état 'Active' ou 'Desactive' (sans guillemet) "
+
 
     # Creation de l'etendue
-    Add-DhcpServerv4Scope -Name $nomEtendue -StartRange $StartIP -EnRange $EndIP -SubnetMask $mask -Description $desc -State $state
-    
+    Add-DhcpServerv4Scope -Name $nomEtendue -StartRange $StartIP -EndRange $EndIP -SubnetMask $mask -Description $desc -State $state
+
     # Demande a l'utilisateur s'il veut creer des exclusions
     $reqCreaExclu=Read-Host -Prompt "Voulez-vous créer une exclusion ? [o]ui ou [n]on "
     while ($reqCreaExclu -eq "o") {
